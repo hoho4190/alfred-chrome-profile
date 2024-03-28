@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>bundleid</key>
+	<string>com.hoho.alfred.chromeprofile</string>
+	<key>category</key>
+	<string>Tools</string>
+	<key>connections</key>
+	<dict>
+		<key>87D03A38-9CF2-42FB-BBEA-A67AEC737536</key>
+		<array/>
+		<key>93576B0D-176A-49BD-A1CC-59438E8FD178</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>DDB70E12-7F13-404C-BFDC-9DAE8D9F28F6</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>D2682B4E-D5B0-4BF8-A3D8-945E98295077</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>DBFB7941-9813-4C67-8AC7-7B623F63C48B</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>DBFB7941-9813-4C67-8AC7-7B623F63C48B</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>93576B0D-176A-49BD-A1CC-59438E8FD178</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>DDB70E12-7F13-404C-BFDC-9DAE8D9F28F6</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>F93AF87B-4CB0-4CA1-950D-B2DEC9412D08</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>F2F60CF8-FBF9-4542-862F-79EAFCF3F76B</key>
+		<array/>
+		<key>F93AF87B-4CB0-4CA1-950D-B2DEC9412D08</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>F2F60CF8-FBF9-4542-862F-79EAFCF3F76B</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>sourceoutputuid</key>
+				<string>034820C8-F0E4-4574-9509-2EA66635DF41</string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+			<dict>
+				<key>destinationuid</key>
+				<string>87D03A38-9CF2-42FB-BBEA-A67AEC737536</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+	</dict>
+	<key>createdby</key>
+	<string>hoho4190</string>
+	<key>description</key>
+	<string>Search and open Chrome's profile</string>
+	<key>disabled</key>
+	<false/>
+	<key>name</key>
+	<string>Chrome Profile</string>
+	<key>objects</key>
+	<array>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>concurrently</key>
+				<false/>
+				<key>escaping</key>
+				<integer>68</integer>
+				<key>script</key>
+				<string>property CHROME_APP_NAME : (system attribute "CHROME_APP_NAME") as string
+property PROFILE_MENU_IDX : (system attribute "PROFILE_MENU_IDX") as integer
+property PROFILE_NAME : (system attribute "PROFILE2") as string
+
+on run
+	log "PROFILE_NAME: " &amp; PROFILE_NAME
+	
+	tell application "System Events"
+		tell process CHROME_APP_NAME
+			set profiles to (get name of every menu item of menu PROFILE_MENU_IDX of menu bar 1)
+			set is_match to false
+			
+			repeat with profile in profiles
+				log "profile: " &amp; profile
+				
+				if profile as string is equal to PROFILE_NAME then
+					log "\"" &amp; profile &amp; "\" Profile matched"
+					
+					click menu item profile of menu 8 of menu bar 1
+					set is_match to true
+					exit repeat
+					
+				else if profile as string is equal to "missing value" then
+					exit repeat
+					
+				end if
+			end repeat
+			
+			if not is_match then
+				log "\"" &amp; PROFILE_NAME &amp; "\" Profile matching failed"
+			end if
+		end tell
+	end tell
+end run</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>type</key>
+				<integer>6</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>F2F60CF8-FBF9-4542-862F-79EAFCF3F76B</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>alfredfiltersresults</key>
+				<false/>
+				<key>alfredfiltersresultsmatchmode</key>
+				<integer>0</integer>
+				<key>argumenttreatemptyqueryasnil</key>
+				<true/>
+				<key>argumenttrimmode</key>
+				<integer>0</integer>
+				<key>argumenttype</key>
+				<integer>1</integer>
+				<key>escaping</key>
+				<integer>0</integer>
+				<key>keyword</key>
+				<string>{var:search_keyword}</string>
+				<key>queuedelaycustom</key>
+				<integer>3</integer>
+				<key>queuedelayimmediatelyinitially</key>
+				<true/>
+				<key>queuedelaymode</key>
+				<integer>0</integer>
+				<key>queuemode</key>
+				<integer>1</integer>
+				<key>runningsubtext</key>
+				<string>Searching for profiles...</string>
+				<key>script</key>
+				<string></string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string>search.sh</string>
+				<key>subtext</key>
+				<string>Search and open Chrome's profile</string>
+				<key>title</key>
+				<string>Chrome Profile</string>
+				<key>type</key>
+				<integer>8</integer>
+				<key>withspace</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
+			<string>D2682B4E-D5B0-4BF8-A3D8-945E98295077</string>
+			<key>version</key>
+			<integer>3</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>concurrently</key>
+				<false/>
+				<key>escaping</key>
+				<integer>68</integer>
+				<key>script</key>
+				<string>property CHROME_APP_NAME : (system attribute "CHROME_APP_NAME") as string
+
+on is_running(app_name)
+	application app_name is running
+end is_running
+
+on run
+	return is_running(CHROME_APP_NAME)
+end run</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>type</key>
+				<integer>6</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>DDB70E12-7F13-404C-BFDC-9DAE8D9F28F6</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>conditions</key>
+				<array>
+					<dict>
+						<key>inputstring</key>
+						<string>{query}</string>
+						<key>matchcasesensitive</key>
+						<false/>
+						<key>matchmode</key>
+						<integer>5</integer>
+						<key>matchstring</key>
+						<string></string>
+						<key>outputlabel</key>
+						<string>activate</string>
+						<key>uid</key>
+						<string>034820C8-F0E4-4574-9509-2EA66635DF41</string>
+					</dict>
+				</array>
+				<key>elselabel</key>
+				<string>open</string>
+				<key>hideelse</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.utility.conditional</string>
+			<key>uid</key>
+			<string>F93AF87B-4CB0-4CA1-950D-B2DEC9412D08</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>delimiter</key>
+				<string>
+</string>
+				<key>discardemptyarguments</key>
+				<false/>
+				<key>outputas</key>
+				<integer>0</integer>
+				<key>trimarguments</key>
+				<true/>
+				<key>variableprefix</key>
+				<string>PROFILE</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.utility.split</string>
+			<key>uid</key>
+			<string>93576B0D-176A-49BD-A1CC-59438E8FD178</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argument</key>
+				<string>{query}</string>
+				<key>passthroughargument</key>
+				<false/>
+				<key>variables</key>
+				<dict>
+					<key>CHROME_APP_NAME</key>
+					<string>Google Chrome</string>
+					<key>PROFILE_MENU_IDX</key>
+					<string>8</string>
+				</dict>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.utility.argument</string>
+			<key>uid</key>
+			<string>DBFB7941-9813-4C67-8AC7-7B623F63C48B</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>concurrently</key>
+				<false/>
+				<key>escaping</key>
+				<integer>68</integer>
+				<key>script</key>
+				<string>property PROFILE_NAME : (system attribute "PROFILE1") as string
+
+on run
+	do shell script "open -na 'Google Chrome' --args --profile-directory=" &amp; PROFILE_NAME's quoted form
+end run</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>type</key>
+				<integer>6</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>87D03A38-9CF2-42FB-BBEA-A67AEC737536</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+	</array>
+	<key>readme</key>
+	<string># Chrome Profile
+
+An Alfred workflow to search and open the profiles of Chrome.
+
+![Sample1](assets/about/sample-16.png)
+![Sample2](assets/about/sample-39.png)
+
+## Usage
+
+- Download and install the [latest workflow release](https://github.com/hoho4190/alfred-chrome-profile/releases/latest).
+- Search for profile using the keyword `chp`.
+- Select the profile you want and it will open.
+
+&gt; https://github.com/hoho4190/alfred-chrome-profile</string>
+	<key>uidata</key>
+	<dict>
+		<key>87D03A38-9CF2-42FB-BBEA-A67AEC737536</key>
+		<dict>
+			<key>colorindex</key>
+			<integer>5</integer>
+			<key>xpos</key>
+			<real>835</real>
+			<key>ypos</key>
+			<real>205</real>
+		</dict>
+		<key>93576B0D-176A-49BD-A1CC-59438E8FD178</key>
+		<dict>
+			<key>xpos</key>
+			<real>390</real>
+			<key>ypos</key>
+			<real>160</real>
+		</dict>
+		<key>D2682B4E-D5B0-4BF8-A3D8-945E98295077</key>
+		<dict>
+			<key>xpos</key>
+			<real>80</real>
+			<key>ypos</key>
+			<real>130</real>
+		</dict>
+		<key>DBFB7941-9813-4C67-8AC7-7B623F63C48B</key>
+		<dict>
+			<key>xpos</key>
+			<real>295</real>
+			<key>ypos</key>
+			<real>160</real>
+		</dict>
+		<key>DDB70E12-7F13-404C-BFDC-9DAE8D9F28F6</key>
+		<dict>
+			<key>xpos</key>
+			<real>500</real>
+			<key>ypos</key>
+			<real>130</real>
+		</dict>
+		<key>F2F60CF8-FBF9-4542-862F-79EAFCF3F76B</key>
+		<dict>
+			<key>colorindex</key>
+			<integer>8</integer>
+			<key>xpos</key>
+			<real>830</real>
+			<key>ypos</key>
+			<real>50</real>
+		</dict>
+		<key>F93AF87B-4CB0-4CA1-950D-B2DEC9412D08</key>
+		<dict>
+			<key>xpos</key>
+			<real>705</real>
+			<key>ypos</key>
+			<real>150</real>
+		</dict>
+	</dict>
+	<key>userconfigurationconfig</key>
+	<array>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>default</key>
+				<string>chp</string>
+				<key>placeholder</key>
+				<string></string>
+				<key>required</key>
+				<true/>
+				<key>trim</key>
+				<true/>
+			</dict>
+			<key>description</key>
+			<string></string>
+			<key>label</key>
+			<string>Profile search keyword</string>
+			<key>type</key>
+			<string>textfield</string>
+			<key>variable</key>
+			<string>search_keyword</string>
+		</dict>
+	</array>
+	<key>variables</key>
+	<dict>
+		<key>APP_SUPPORT_PATH</key>
+		<string>~/Library/Application Support/Google/Chrome</string>
+	</dict>
+	<key>version</key>
+	<string>{{VERSION}}</string>
+	<key>webaddress</key>
+	<string>https://github.com/hoho4190/alfred-chrome-profile</string>
+</dict>
+</plist>

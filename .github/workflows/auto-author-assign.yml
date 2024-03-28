@@ -1,0 +1,18 @@
+name: 👷‍♂️ Auto Author Assign
+on:
+  pull_request:
+    types:
+      - opened
+
+jobs:
+  add-assignees-to-pr:
+    name: Add assignees to PR
+
+    runs-on: ubuntu-latest
+
+    permissions:
+      pull-requests: write
+
+    steps:
+      - name: Add author as assignee to PR
+        uses: toshimaru/auto-author-assign@v2.1.0

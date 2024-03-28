@@ -1,0 +1,89 @@
+name: 🏗️ Build
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+env:
+  ARTIFACT_NAME: alfredworkflow
+
+jobs:
+  build:
+    name: Build
+
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read # for private repo: actions/checkout@v4
+      pull-requests: read # for private repo: env-setting.sh
+
+    outputs:
+      IS_RELEASE: ${{ env.IS_RELEASE }}
+      RELEASE_TAG: ${{ env.RELEASE_TAG }}
+      ARTIFACT_PATH: ${{ steps.build.outputs.OUTPUT_PATH }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set env
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          bash .github/scripts/build/env-setting.sh
+
+      - name: Build
+        id: build
+        run: |
+          bash .github/scripts/build/build.sh
+
+      - name: Upload artifact
+        if: github.ref_name == 'main'
+        id: upload-artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.ARTIFACT_NAME }}
+          path: ${{ steps.build.outputs.OUTPUT_PATH }}
+          overwrite: true
+
+  upload-asset:
+    name: Upload asset
+    if: needs.build.outputs.IS_RELEASE == 'true'
+    needs: build
+
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write # for Delete, update assets
+
+    env:
+      RELEASE_TAG: ${{ needs.build.outputs.RELEASE_TAG }}
+      ARTIFACT_PATH: ${{ needs.build.outputs.ARTIFACT_PATH }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: .git
+
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.ARTIFACT_NAME }}
+          path: ${{ env.ARTIFACT_PATH }}
+
+      - name: Display structure of downloaded files
+        run: ls -R "$ARTIFACT_PATH"
+
+      - name: Delete assets
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release view "$RELEASE_TAG" --json assets -q '.assets[].name' \
+            | xargs -t -I % gh release delete-asset "$RELEASE_TAG" %
+
+      - name: Upload assets
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ls -p $ARTIFACT_PATH | grep -v / \
+            | xargs -I % gh release upload "$RELEASE_TAG" "$ARTIFACT_PATH/%"

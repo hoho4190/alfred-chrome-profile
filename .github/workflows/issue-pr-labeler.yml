@@ -1,0 +1,23 @@
+name: 🏷️ Issue PR Labeler
+on:
+  pull_request:
+    types:
+      - opened
+      - edited
+
+jobs:
+  add-labels-to-pr:
+    name: Add labels to PR
+
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Run Issue PR Labeler
+        uses: hoho4190/issue-pr-labeler@v2.0.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          config-file-name: issue-pr-labeler-config.yml
