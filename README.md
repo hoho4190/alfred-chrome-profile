@@ -1,7 +1,7 @@
 # Chrome Profile - Alfred workflow
 
 [![Build](https://github.com/hoho4190/alfred-chrome-profile/actions/workflows/build.yml/badge.svg)](https://github.com/hoho4190/alfred-chrome-profile/actions/workflows/build.yml)
-[![GitHub License](https://img.shields.io/github/license/hoho4190/alfred-chrome-profile)](https://github.com/hoho4190/alfred-chrome-profile?tab=GPL-3.0-1-ov-file)
+[![GitHub License](https://img.shields.io/github/license/hoho4190/alfred-chrome-profile)](https://github.com/hoho4190/alfred-chrome-profile?tab=Apache-2.0-1-ov-file)
 [![GitHub Release](https://img.shields.io/github/v/release/hoho4190/alfred-chrome-profile)](https://github.com/hoho4190/alfred-chrome-profile/releases/latest)
 [![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/hoho4190/alfred-chrome-profile/total)](https://github.com/hoho4190/alfred-chrome-profile/releases/latest)
 
