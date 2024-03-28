@@ -24,7 +24,7 @@ body:
       label: Version
       description: What version did that bug occur in?
       options:
-        - v0.0.0
+        - v1.0.0
     validations:
       required: true
   - type: textarea
@@ -69,3 +69,6 @@ body:
       description: Please include any relevant log snippets or files here.
     validations:
       required: false
+
+# Updated by release/v1.0.0
+# Thu Mar 28 04:15:10 UTC 2024
