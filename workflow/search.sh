@@ -1,34 +1,13 @@
 #!/bin/bash
 
 readonly QUERY=$(tr '[A-Z]' '[a-z]' <<<"$1")
-readonly CACHE_PATH="$alfred_workflow_cache"
+readonly DEFAULT_AVATAR_PATH="assets/avatar/default.png"
+readonly AVATAR_INFO_PATH="assets/avatar/avatar-info.json"
 
 get_profile_path() {
     local path="${1/#~/$HOME}"
     [[ "${path: -1}" != "/" ]] && path+="/"
-    path=$(sed 's/\\ / /g' <<<"$path")
-    echo "${path}Local State"
-}
-
-clean_up_cache_by_month() {
-    if [[ ! -f "$CACHE_PATH/$1" ]]; then
-        rm -rf "$CACHE_PATH"
-        mkdir -p "$CACHE_PATH"
-        touch "$CACHE_PATH/$1"
-    fi
-}
-
-convert_icon_name() {
-    echo $(echo "$1" | md5).png
-}
-
-save_icon() {
-    local download_url="$1"
-    local file_path="$2"
-
-    if [[ ! -e "$file_path" ]]; then
-        curl -s -o "$file_path" "$download_url"
-    fi
+    sed 's/\\ / /g' <<<"$path"
 }
 
 get_item() {
@@ -36,24 +15,42 @@ get_item() {
     local icon_path
     local arg
 
-    profile_name=$(jq -r '.profile_name' <<<"$1")
-    name=$(jq -r '.name' <<<"$1")
-    gaia_given_name=$(jq -r '.gaia_given_name' <<<"$1")
-    icon_url=$(jq -r '.icon_url' <<<"$1")
+    local profile_name=$(jq -r '.profile_name' <<<"$1")
+    local name=$(jq -r '.name' <<<"$1")
+    local gaia_given_name=$(jq -r '.gaia_given_name' <<<"$1")
+    local gaia_picture_file_name=$(jq -r '.gaia_picture_file_name' <<<"$1")
+    local gaia_picture_url=$(jq -r '.gaia_picture_url' <<<"$1")
+    local use_gaia_picture=$(jq -r '.use_gaia_picture' <<<"$1")
+    local avatar_icon=$(jq -r '.avatar_icon' <<<"$1")
 
+    # set title
     if [[ -z "$gaia_given_name" || "$name" == "$gaia_given_name" ]]; then
         title="$name"
     else
         title="$gaia_given_name ($name)"
     fi
 
-    if [[ "$icon_url" == "null" ]]; then
-        icon_path="assets/images/default.png"
+    # set icon_path
+    if [[ "$use_gaia_picture" == false || "$gaia_picture_url" == "null" ]]; then
+
+        if [[ "$avatar_icon" == *"_26" ]]; then
+            icon_path="$DEFAULT_AVATAR_PATH"
+        else
+            # https://github.com/chromium/chromium/blob/main/chrome/browser/profiles/profile_avatar_icon_util.cc#L414C35-L414C35
+            avatar_icon=$(sed 's/chrome:\/\/theme\///g' <<<"$avatar_icon")
+            avatar_name=$(
+                jq -r --arg avatar_icon "$avatar_icon" \
+                    '. | to_entries[] | select(.key == $avatar_icon) | .value' <"$AVATAR_INFO_PATH"
+            )
+            icon_path="${APP_SUP_PATH}Avatars/$avatar_name"
+
+            [[ ! -f "$icon_path" ]] && icon_path="$DEFAULT_AVATAR_PATH"
+        fi
     else
-        icon_path="$CACHE_PATH/"$(convert_icon_name "$icon_url")
-        save_icon "$icon_url" "$icon_path"
+        icon_path="${APP_SUP_PATH}$profile_name/$gaia_picture_file_name"
     fi
 
+    # set arg
     arg="${profile_name}"$'\n'"$title"
 
     jq --arg title "$title" --arg icon_path "$icon_path" --arg arg "$arg" \
@@ -63,13 +60,7 @@ get_item() {
 ###########################
 ## MAIN
 
-readonly PROFILE_PATH=$(get_profile_path "$APP_SUPPORT_PATH")
-
-# make cache directory
-[[ -d "$CACHE_PATH" ]] || mkdir -p "$CACHE_PATH"
-
-# clean up cached images every month
-clean_up_cache_by_month $(date +"%m")
+readonly APP_SUP_PATH=$(get_profile_path "$APP_SUPPORT_PATH")
 
 profiles=$(
     jq --arg q "$QUERY" '.profile.info_cache | to_entries[] 
@@ -78,8 +69,11 @@ profiles=$(
             profile_name: .key,
             name: .value.name,
             gaia_given_name: .value.gaia_given_name,
-            icon_url: .value.last_downloaded_gaia_picture_url_with_size
-        }' <"$PROFILE_PATH"
+            gaia_picture_file_name: .value.gaia_picture_file_name,
+            gaia_picture_url: .value.last_downloaded_gaia_picture_url_with_size,
+            use_gaia_picture: .value.use_gaia_picture,
+            avatar_icon: .value.avatar_icon
+        }' <"${APP_SUP_PATH}Local State"
 )
 
 items="[]"
