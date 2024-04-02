@@ -11,6 +11,9 @@ An Alfred workflow to search and open the profiles of Chrome.
 
 ## Usage
 
+- [jq](https://github.com/jqlang/jq) pre-installation is required.
+  - jq is a lightweight and flexible command-line JSON processor.
+  - You can also install jq using [Homebrew, MacPorts, Fink](https://jqlang.github.io/jq/download/).
 - Download and install the [latest workflow release](https://github.com/hoho4190/alfred-chrome-profile/releases/latest).
 - Search for profile using the keyword `chp`.
 - Select the profile you want and it will open.
@@ -24,6 +27,12 @@ An Alfred workflow to search and open the profiles of Chrome.
 
 ```bash
 GNU bash, version 3.2.57(1)-release (arm64-apple-darwin23)
+```
+
+##### jq
+
+```bash
+jq-1.7.1
 ```
 
 ##### Alfred
