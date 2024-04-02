@@ -444,7 +444,7 @@ An Alfred workflow to search and open the profiles of Chrome.
 		<string>~/Library/Application Support/Google/Chrome</string>
 	</dict>
 	<key>version</key>
-	<string>dev</string>
+	<string>{{VERSION}}</string>
 	<key>webaddress</key>
 	<string>https://github.com/hoho4190/alfred-chrome-profile</string>
 </dict>
