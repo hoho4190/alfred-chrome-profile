@@ -21,7 +21,7 @@ issues: #NUM, #NUM, ...
 - [ ] Documentation content changes
 - [ ] Release new version
 
-## Whether Braking Changes
+## Whether Breaking Changes
 
 Does this PR contain breaking changes?
 
