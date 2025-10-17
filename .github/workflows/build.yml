@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
-      contents: read # for private repo: actions/checkout@v4
+      contents: read # for private repo: actions/checkout@v5
       pull-requests: read # for private repo: env-setting.sh
 
     outputs:
@@ -24,7 +24,7 @@ jobs:
       ARTIFACT_PATH: ${{ steps.build.outputs.OUTPUT_PATH }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Set env
         env:
@@ -61,7 +61,7 @@ jobs:
       ARTIFACT_PATH: ${{ needs.build.outputs.ARTIFACT_PATH }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           sparse-checkout: .git
 
