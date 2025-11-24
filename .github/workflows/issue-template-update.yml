@@ -19,7 +19,7 @@ jobs:
       contents: write # for git commit
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - name: Set env
         run: |
