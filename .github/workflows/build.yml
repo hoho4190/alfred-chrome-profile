@@ -40,7 +40,7 @@ jobs:
       - name: Upload artifact
         if: github.ref_name == 'main'
         id: upload-artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: ${{ env.ARTIFACT_NAME }}
           path: ${{ steps.build.outputs.OUTPUT_PATH }}
